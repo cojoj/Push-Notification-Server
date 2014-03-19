@@ -33,17 +33,27 @@ post '/send' do
   devicesIDs.each do |id|
     @devices << Device.get(id)
   end
+  
+  androids = Array.new
+  @devices.each do |device|
+    if device.os == 1
+      androids << device
+    else
+      # Handle requests for iOS
+    end
+  end
 
   erb :list
 end
 
 post '/register' do
-  @device = Device.new( :device_id => params[:device_id],
-                        :owner => params[:owner])
+  @device = Device.new( :id    => params[:device_id],
+                        :owner => params[:owner],
+                        :os    => params[:os])
   
   if @device.save
-    "Udało się zapisać"
+    "Saving device to database - SUCCESS"
   else
-    "Nie udało się zapisać"
+    "Saving device to database - FAILURE"
   end
 end

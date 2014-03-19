@@ -1,20 +1,23 @@
 <html>
-<head>
-	<meta charset="utf-8"/>
-	<title>Add new notification</title>
-</head>
-<body>
-
-	Add new notification, set the message content and notification recivers: <br/>
-	<form action="/send" method="POST">
-    <select name="devicesIDs[]" multiple>
-      <% @devices.each do |device|%>
-        <option value="<%= device.device_id %>"><%= device.owner %></option>
-      <% end %>
-    </select></br>
-		<label for="message">Message:</label>
-		<input type="text" name="message"/><br/>
-		<input type="submit" value="Send notification"/>
-	</form>
-</body>
+  <head>
+  	<meta charset="utf-8"/>
+  	<title>PNS</title>
+  </head>
+  
+  <body>
+    <div>Send new notification by setting the message content and notification recivers:</div></br>
+    
+  	<form action="/send" method="POST">
+      <select name="devicesIDs[]" multiple>
+        <% @devices.each do |device|%>
+          <option value="<%= device.device_id %>"><%= device.owner %></option>
+        <% end %>
+      </select>
+    
+  		<label for="message">Message:</label>
+  		<input type="text" name="message"/><br/>
+		  <input type="submit" value="Send notification"/>
+    
+	  </form>
+  </body>
 </html>

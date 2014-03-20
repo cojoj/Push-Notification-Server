@@ -6,6 +6,10 @@ require 'dm-sqlite-adapter'
 require 'gcm'
 require 'haml'
 
+################# Global constants #################
+
+ANDROID_API_KEY = "AIzaSyCHfOzDIlO-ewKLFd6LKCAkxwdsOg7f76w"
+
 ################# Database initialization #################
 
 DataMapper.setup(:default, 'sqlite:db/pns_db.db')
@@ -39,32 +43,7 @@ post '/send' do
   message_content = params[:message]
 
   @devices = Array.new
-  
-  devicesIDs.each do |id|
-    @devices << Device.get(id)
-  end
-  
-  androids = Array.new
-  #androids = "["
-  
-  @devices.each do |device|
-    if device.os == 1
-      androids << device.id 
-    else
-      # Handle requests for iOS
-    end
-  end
-  
-  puts androids;
-  ids = androids.to_json
-  puts ids
-
-  api_key = "AIzaSyCHfOzDIlO-ewKLFd6LKCAkxwdsOg7f76w"
-  gcm = GCM.new(api_key)
-  data = {data: {message: message_content}};
-  response = gcm.send_notification(androids, data)
-  
-  puts response
+  @devices = sendMessageToDevices(devicesIDs, message_content)
   
   erb :list
 end
@@ -81,4 +60,36 @@ post '/register' do
   else
     "Saving device to database - FAILURE"
   end
+end
+
+
+################# Helper methods #################
+
+def sendMessageToDevices(devicesIDs, message)
+  # Creating arrays for different devices 
+  androidDevices = Array.new
+  iOSDevices = Array.new
+  
+  # Interating through array of devices IDs
+  devicesIDs.each do |id|
+    device = Device.get(id)
+    
+    # Grouping devices into Arrays
+    if device.os == 1
+      androidDevices << device
+    elsif device.os == 2
+      iOSDevices << device
+    end
+  end
+  
+  # Sending GCM to all Androids
+  gcm = GCM.new(ANDROID_API_KEY)
+  data = {data: {message: message} };
+  response = gcm.send_notification(androidDevices.map(&:id), data)
+  # puts response
+  
+  # Sending APN to all iOSs
+  
+  # Returning an array of devices to which the push notification was sent
+  return androidDevices.concat(iOSDevices)
 end

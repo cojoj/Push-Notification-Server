@@ -29,7 +29,7 @@ end
 
 post '/send' do
   devicesIDs = params[:devicesIDs]
-  message_content = params[:message]
+  message = params[:message]
 
   @devices = Array.new
   
@@ -51,10 +51,13 @@ post '/send' do
   puts androids;
   ids = androids.to_json
   puts ids
-
+  #@ids = androids.join(",")
   api_key = "AIzaSyCHfOzDIlO-ewKLFd6LKCAkxwdsOg7f76w"
   gcm = GCM.new(api_key)
-  data = {data: {message: message_content}};
+  #ids = androids.to_json
+  #ids = ["1", "2"] 
+  #puts ids
+  data = {data: {score: "123"}, collapse_key: "updated_score"};
   response = gcm.send_notification(androids, data)
   
   puts response

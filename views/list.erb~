@@ -2,4 +2,4 @@
   <%= device.owner %> <%=  device.id %> <%= device.os %></br>
 <% end %>
 Napis:
-</br><%= @ids %>
+</br><% @ids %>

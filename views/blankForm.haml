@@ -1,0 +1,17 @@
+%html
+  %head
+    %title Blank Form
+    %meta{:charset => "utf-8"}
+    
+  %body
+    %p Send new notification by setting the message content and notification recivers:
+    %form{:action => '/send', :method => 'post'}
+      %select{:name => 'devicesIDs[]', :multiple => true}
+        - @devices.each do |device|
+          %option{:value => "=device.id"} 
+            = device.owner
+      %br
+      %label{:for => "message"} Message
+      %input{:type => "text", :name => "message"}
+      %br
+      %input{:type => "submit", :value => "Send notification"}

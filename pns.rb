@@ -4,27 +4,34 @@ require 'dm-core'
 require 'dm-migrations'
 require 'dm-sqlite-adapter'
 require 'gcm'
+require 'haml'
+
+################# Database initialization #################
 
 DataMapper.setup(:default, 'sqlite:db/pns_db.db')
 
 class Device
   include DataMapper::Resource
   
-  property :id, String, key: true, unique: true, length: 200
-  property :owner, String
-  property :os, Integer		#1 - Android, 2 - iOS
-  property :os_code, String       
+  property :id,       String, key: true, unique: true, length: 200
+  property :owner,    String
+  property :os,       Integer		#1 - Android, 2 - iOS
+  property :os_code,  String       
 end
-DataMapper.finalize
 
-configure :development do
-    DataMapper.auto_upgrade!
-    #DataMapper.auto_migrate!
-end
+DataMapper.finalize.auto_upgrade! #auto_migrate! to clear everything
+
+################# REST #################
 
 get '/' do
   @devices = Device.all
-  erb :addMessage
+  #erb :addMessage
+  haml :blankForm
+end
+
+get '/devices' do
+  @devices = Device.all
+  haml :devices
 end
 
 post '/send' do
@@ -63,10 +70,10 @@ post '/send' do
 end
 
 post '/register' do
-  @device = Device.new( :id    => params[:id],
-                        :owner => params[:owner],
-                        :os    => params[:os],
-                        :os_code => params[:os_code])
+  @device = Device.new( :id       => params[:id],
+                        :owner    => params[:owner],
+                        :os       => params[:os],
+                        :os_code  => params[:os_code])
                          
   
   if @device.save

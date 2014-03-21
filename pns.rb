@@ -28,6 +28,7 @@ DataMapper.finalize.auto_upgrade! #auto_migrate! to clear everything
 
 get '/' do
   @devices = Device.all
+  # erb :addMessage
   haml :blankForm
 end
 
@@ -41,7 +42,7 @@ post '/send' do
   message_content = params[:message]
 
   @devices = Array.new
-  @devices = send_message_to_devices(devicesIDs, message_content)
+  @devices = send_message_to_devices(devices_ids, message_content)
   
   erb :list
 end

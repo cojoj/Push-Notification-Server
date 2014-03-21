@@ -43,7 +43,7 @@ post '/send' do
   @devices = Array.new
   @devices = send_message_to_devices(devices_ids, message_content)
   
-  erb :list
+  haml :list
 end
 
 get '/add' do
@@ -56,10 +56,11 @@ post '/register' do
                         :os       => params[:os])
   
   if @device.save
-    "Saving device to database - SUCCESS"
+    puts "Saving device to database - SUCCESS"
     redirect '/'
   else
-    "Saving device to database - FAILURE"
+    puts"Saving device to database - FAILURE"
+    redirect '/'
   end
 end
 

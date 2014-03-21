@@ -1,10 +1,43 @@
 %html
   %head
-    %title Sent notifications
+    %title PNS - Home
     %meta{:charset => "utf-8"}
-    
+    %link{:href => "/css/bootstrap.css", :rel => "stylesheet"}
+    %link{:href => "/css/bootstrap-theme.css", :rel => "stylesheet"}
+  
   %body
-    %p Push notification has been sento to:
-    %ul
-      -@devices.each do |device|
-        %li= device.owner (= device.os)
+    .navbar.navbar-inverse.navbar-fixed-top
+      .container
+        .navbar-header
+          %button.navbar-toggle.collapsed{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{:href => '/'} PNS
+        .navbar-collapse.collapse
+          %ul.nav.navbar-nav
+            %li.active
+              %a{:href => '/'}Home
+            %li
+              %a{:href => '/devices'}Devices
+            %li
+              %a{:href => '/add'}Add
+    
+    .container.page-header                   
+      %h3 Push notification has been sent to:
+  
+    .container
+      %table.table.table-striped
+        %thead
+          %th #
+          %th Owner
+          %th Operating System
+        %tbody
+          - @devices.each_with_index do |device, index|
+            %tr
+              %td= index + 1
+              %td= device.owner
+              %td= device.os
+        
+%script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"}    
+%script{:src => "/js/bootstrap.js"}

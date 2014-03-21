@@ -28,8 +28,7 @@ DataMapper.finalize.auto_upgrade! #auto_migrate! to clear everything
 
 get '/' do
   @devices = Device.all
-  # erb :addMessage
-  haml :blankForm
+  haml :home
 end
 
 get '/devices' do

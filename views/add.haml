@@ -1,0 +1,19 @@
+%html
+  %head
+    %title Add device
+    %meta{:charset => "utf-8"}
+  
+  %body
+    %p Add new device to database:
+    %form{:action => "/register", :method => "POST"}
+      %label{:for => "owner"} Owner
+      %input{:type => "text", :name => "owner"}
+      %br
+      %label{:for => "id"} Device ID
+      %input{:type => "text", :name => "id"}
+      %br
+      %select{:name => "os"}
+        %option Android
+        %option iOS
+      %br
+      %input{:type => "submit", :value => "Save"}

@@ -1,0 +1,10 @@
+%html
+  %head
+    %title Sent notifications
+    %meta{:charset => "utf-8"}
+    
+  %body
+    %p Push notification has been sento to:
+    %ul
+      -@devices.each do |device|
+        %li= device.owner (= device.os)

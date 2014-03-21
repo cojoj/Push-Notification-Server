@@ -19,8 +19,7 @@ class Device
   
   property :id,       String, key: true, unique: true, length: 200
   property :owner,    String
-  property :os,       Integer		#1 - Android, 2 - iOS
-  property :os_code,  String       
+  property :os,       String       
 end
 
 DataMapper.finalize.auto_upgrade! #auto_migrate! to clear everything
@@ -29,7 +28,6 @@ DataMapper.finalize.auto_upgrade! #auto_migrate! to clear everything
 
 get '/' do
   @devices = Device.all
-  #erb :addMessage
   haml :blankForm
 end
 
@@ -39,24 +37,27 @@ get '/devices' do
 end
 
 post '/send' do
-  devicesIDs = params[:devicesIDs]
+  devices_ids = params[:devicesIDs]
   message_content = params[:message]
 
   @devices = Array.new
-  @devices = sendMessageToDevices(devicesIDs, message_content)
+  @devices = send_message_to_devices(devicesIDs, message_content)
   
   erb :list
+end
+
+get '/add' do
+  haml :add
 end
 
 post '/register' do
   @device = Device.new( :id       => params[:id],
                         :owner    => params[:owner],
-                        :os       => params[:os],
-                        :os_code  => params[:os_code])
-                         
+                        :os       => params[:os])
   
   if @device.save
     "Saving device to database - SUCCESS"
+    redirect '/'
   else
     "Saving device to database - FAILURE"
   end
@@ -65,31 +66,31 @@ end
 
 ################# Helper methods #################
 
-def sendMessageToDevices(devicesIDs, message)
+def send_message_to_devices(ids, message)
   # Creating arrays for different devices 
-  androidDevices = Array.new
-  iOSDevices = Array.new
+  android_devices = Array.new
+  iOS_devices = Array.new
   
   # Interating through array of devices IDs
-  devicesIDs.each do |id|
+  ids.each do |id|
     device = Device.get(id)
     
     # Grouping devices into Arrays
-    if device.os == 1
-      androidDevices << device
-    elsif device.os == 2
-      iOSDevices << device
+    if device.os == 'Android'
+      android_devices << device
+    elsif device.os == 'iOS'
+      iOS_devices << device
     end
   end
   
   # Sending GCM to all Androids
   gcm = GCM.new(ANDROID_API_KEY)
   data = {data: {message: message} };
-  response = gcm.send_notification(androidDevices.map(&:id), data)
+  response = gcm.send_notification(android_devices.map(&:id), data)
   # puts response
   
   # Sending APN to all iOSs
   
   # Returning an array of devices to which the push notification was sent
-  return androidDevices.concat(iOSDevices)
+  return android_devices.concat(iOS_devices)
 end

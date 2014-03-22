@@ -83,10 +83,7 @@ def send_message_to_devices(ids, message)
   service = NotificationService.new
   
   # Sending GCM to all Androids
-  gcm = GCM.new(ANDROID_API_KEY)
-  data = {data: {message: message} };
-  response = gcm.send_notification(android_devices.map(&:id), data)
-  # puts response
+  service.send_to_android_devices(android_devices, message)
   
   # Sending APN to all iOSs
   service.send_to_ios_devices(iOS_devices, message)

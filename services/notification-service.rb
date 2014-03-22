@@ -31,6 +31,7 @@ class NotificationService
     devices.each do |device|
       notification = Houston::Notification.new(device: device.id)
       notification.alert = message
+      notification.sound = "default"
       @apn.write(notification.message)
     end
     
@@ -38,4 +39,3 @@ class NotificationService
     @apn.close
   end
 end
-

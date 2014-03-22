@@ -3,12 +3,8 @@ require 'data_mapper'
 require 'dm-core'
 require 'dm-migrations'
 require 'dm-sqlite-adapter'
-require 'gcm'
 require 'haml'
-
-################# Global constants #################
-
-ANDROID_API_KEY = "AIzaSyCHfOzDIlO-ewKLFd6LKCAkxwdsOg7f76w"
+require_relative 'services/notification-service'
 
 ################# Database initialization #################
 
@@ -84,6 +80,8 @@ def send_message_to_devices(ids, message)
     end
   end
   
+  service = NotificationService.new
+  
   # Sending GCM to all Androids
   gcm = GCM.new(ANDROID_API_KEY)
   data = {data: {message: message} };
@@ -91,6 +89,7 @@ def send_message_to_devices(ids, message)
   # puts response
   
   # Sending APN to all iOSs
+  service.send_to_ios_devices(iOS_devices, message)
   
   # Returning an array of devices to which the push notification was sent
   return android_devices.concat(iOS_devices)

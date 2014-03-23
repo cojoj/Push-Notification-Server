@@ -19,7 +19,7 @@ class NotificationService
   # Sending message to all Android devices
   def send_to_android_devices(devices, message)
     data = {data: {message: message}}
-    @gcm.send_notification(android_devices.map(&:id), data)
+    @gcm.send_notification(devices.map(&:id), data)
   end
   
   # Sending message to all iOS devices

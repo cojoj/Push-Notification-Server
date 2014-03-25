@@ -32,6 +32,7 @@ class NotificationService
       notification = Houston::Notification.new(device: device.id)
       notification.alert = message
       notification.sound = "default"
+      notification.badge = 1
       @apn.write(notification.message)
     end
     

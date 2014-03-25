@@ -13,7 +13,7 @@ DataMapper.setup(:default, 'sqlite:db/pns_db.db')
 class Device
   include DataMapper::Resource
   
-  property :id,       String, key: true, unique: true, length: 200
+  property :id,       String, key: true, unique: true, length: 400
   property :owner,    String
   property :os,       String       
 end
@@ -50,16 +50,19 @@ post '/register' do
   @device = Device.new( :id       => params[:id],
                         :owner    => params[:owner],
                         :os       => params[:os])
-  
+    
   if @device.save
     puts "Saving device to database - SUCCESS"
-    redirect '/'
+    redirect "/"
   else
     puts"Saving device to database - FAILURE"
-    redirect '/'
   end
 end
 
+delete '/remove' do
+  device = Device.get(params[:id])
+  device.destroy!
+end
 
 ################# Helper methods #################
 

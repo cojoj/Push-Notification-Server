@@ -8,6 +8,12 @@ To use **PNS** you have to install dependencies. If you are using `bunder` just 
 
 If you have all dependencies installed and modified sorce code for your purposes you fire up `WEBricks` using `ruby pns.rb` in home directory. By default app will launch on port **4567** so you can start using web app by visiting [`localhost`](http://localhost:4567).
 
+Where is the client for this?
+------------------
+**PNS** was built to work with both iOS and Android and simple apps for this purpose were also made and you can find them:
++ [iOS](https://github.com/cojoj/PNS-iOS)
++ [Android]()
+
 3'rd paty libraries used in PNS
 -------------------
 + [Sinatra](https://github.com/sinatra/sinatra)
